@@ -1,0 +1,19 @@
+<h2>Room List</h2>
+
+@if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+}
+
+@if (rooms.length > 0) {
+  <ul>
+    @for (room of rooms; track room.id) {
+      <li>
+        <strong>{{ room.name }}</strong><br>
+        Capacity: {{ room.capacity }}<br>
+        Description: {{ room.description }}
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No rooms available</p>
+}
