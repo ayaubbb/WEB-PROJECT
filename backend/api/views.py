@@ -1,9 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from .models import Room
-from .serializers import RoomSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from django.shortcuts import get_object_or_404
+from .models import Room, Booking, Equipment, IssueReport
+from .serializers import (
+    RoomSerializer, BookingSerializer, EquipmentSerializer,
+    IssueReportSerializer, BookingCreateSerializer
+)
 
+# ========== 1. CBV: список комнат (публичный) ==========
 class RoomListView(APIView):
     permission_classes = [AllowAny]
 
@@ -11,3 +18,88 @@ class RoomListView(APIView):
         rooms = Room.objects.all()
         serializer = RoomSerializer(rooms, many=True)
         return Response(serializer.data)
+
+# ========== 2. CBV: создание брони (только авторизованные) ==========
+class BookingCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = BookingCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            room_id = serializer.validated_data['room_id']
+            start = serializer.validated_data['start_time']
+            end = serializer.validated_data['end_time']
+            room = get_object_or_404(Room, id=room_id)
+
+            # Проверка, что комната свободна
+            if Booking.objects.filter(room=room, start_time__lt=end, end_time__gt=start).exists():
+                return Response(
+                    {"error": "Комната уже занята в выбранное время"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            booking = Booking.objects.create(
+                user=request.user,
+                room=room,
+                start_time=start,
+                end_time=end
+            )
+            return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ========== 3. FBV: отмена брони ==========
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    if booking.user != request.user:
+        return Response(
+            {"error": "Нельзя отменить чужую бронь"},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    booking.delete()
+    return Response({"message": "Бронь успешно отменена"}, status=status.HTTP_200_OK)
+
+# ========== 4. FBV: создание жалобы на оборудование ==========
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_issue(request):
+    equipment_id = request.data.get('equipment_id')
+    title = request.data.get('title')
+    description = request.data.get('description')
+
+    if not all([equipment_id, title, description]):
+        return Response(
+            {"error": "Поля equipment_id, title, description обязательны"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    equipment = get_object_or_404(Equipment, id=equipment_id)
+    issue = IssueReport.objects.create(
+        user=request.user,
+        equipment=equipment,
+        title=title,
+        description=description
+    )
+    serializer = IssueReportSerializer(issue)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# ========== (опционально) CBV для деталей комнаты – даёт полный CRUD для Room ==========
+# Если хочешь добавить, раскомментируй. Не обязательно, но плюс к требованию CRUD.
+"""
+class RoomDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, room_id):
+        room = get_object_or_404(Room, id=room_id)
+        serializer = RoomSerializer(room, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, room_id):
+        room = get_object_or_404(Room, id=room_id)
+        room.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+"""
