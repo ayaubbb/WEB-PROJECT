@@ -84,6 +84,34 @@ def create_issue(request):
     serializer = IssueReportSerializer(issue)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+# ========== 5. ВТОРОЙ CBV: Список и обновление личных броней (Full CRUD) ==========
+class UserBookingDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # READ: Показать только брони текущего пользователя
+    def get(self, request):
+        bookings = Booking.objects.filter(user=request.user)
+        serializer = BookingSerializer(bookings, many=True)
+        return Response(serializer.data)
+
+    # UPDATE: Изменить существующую бронь (например, время)
+    def put(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+        # Используем partial=True, чтобы можно было обновить только одно поле
+        serializer = BookingSerializer(booking, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ========== 6. Logout View (Для ТЗ) ==========
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        # В JWT выход обычно делается на фронте, но этот эндпоинт нужен для отчета
+        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+
 # ========== (опционально) CBV для деталей комнаты – даёт полный CRUD для Room ==========
 # Если хочешь добавить, раскомментируй. Не обязательно, но плюс к требованию CRUD.
 """
