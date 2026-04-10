@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, Booking
+from .models import *
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,14 +20,12 @@ class IssueReportFormSerializer(serializers.Serializer):
     description = serializers.CharField()
     user_id = serializers.IntegerField()
 
-# Сериализатор для Equipment (ModelSerializer)
 class EquipmentSerializer(serializers.ModelSerializer):
     room_number = serializers.ReadOnlyField(source='room.number')
     class Meta:
         model = Equipment
         fields = ['id', 'name', 'room', 'room_number', 'is_working']
 
-# Сериализатор для IssueReport (ModelSerializer)
 class IssueReportSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='user.username')
     equipment_name = serializers.ReadOnlyField(source='equipment.name')
@@ -36,7 +34,6 @@ class IssueReportSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'user_username', 'equipment', 'equipment_name', 'title', 'description', 'created_at']
         read_only_fields = ['user', 'created_at']
 
-# Обычный Serializer для создания брони с валидацией
 class BookingCreateSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     start_time = serializers.DateTimeField()
@@ -45,5 +42,14 @@ class BookingCreateSerializer(serializers.Serializer):
     def validate(self, data):
         if data['start_time'] >= data['end_time']:
             raise serializers.ValidationError("Время начала должно быть раньше окончания")
-        # Проверка на пересечение броней (можно добавить позже)
         return data
+    
+class CanteenTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CanteenTable
+        fields = '__all__'
+        
+class TableBookingCreateSerializer(serializers.Serializer):
+    table_id = serializers.IntegerField()
+    booking_date = serializers.DateField()
+    meal_time = serializers.CharField(max_length=50)

@@ -4,13 +4,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404
-from .models import Room, Booking, Equipment, IssueReport
-from .serializers import (
-    RoomSerializer, BookingSerializer, EquipmentSerializer,
-    IssueReportSerializer, BookingCreateSerializer
-)
+from .models import *
+from .serializers import *
 
-# ========== 1. CBV: список комнат (публичный) ==========
 class RoomListView(APIView):
     permission_classes = [AllowAny]
 
@@ -19,7 +15,6 @@ class RoomListView(APIView):
         serializer = RoomSerializer(rooms, many=True)
         return Response(serializer.data)
 
-# ========== 2. CBV: создание брони (только авторизованные) ==========
 class BookingCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -31,10 +26,9 @@ class BookingCreateView(APIView):
             end = serializer.validated_data['end_time']
             room = get_object_or_404(Room, id=room_id)
 
-            # Проверка, что комната свободна
             if Booking.objects.filter(room=room, start_time__lt=end, end_time__gt=start).exists():
                 return Response(
-                    {"error": "Комната уже занята в выбранное время"},
+                    {"error": "The room is already occupied at the selected time."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -47,20 +41,18 @@ class BookingCreateView(APIView):
             return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# ========== 3. FBV: отмена брони ==========
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     if booking.user != request.user:
         return Response(
-            {"error": "Нельзя отменить чужую бронь"},
+            {"error": "You can't cancel someone else's reservation."},
             status=status.HTTP_403_FORBIDDEN
         )
     booking.delete()
-    return Response({"message": "Бронь успешно отменена"}, status=status.HTTP_200_OK)
+    return Response({"message": "The reservation has been successfully cancelled."}, status=status.HTTP_200_OK)
 
-# ========== 4. FBV: создание жалобы на оборудование ==========
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_issue(request):
@@ -70,7 +62,7 @@ def create_issue(request):
 
     if not all([equipment_id, title, description]):
         return Response(
-            {"error": "Поля equipment_id, title, description обязательны"},
+            {"error": "The equipment_id, title, and description fields are required."},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -114,6 +106,44 @@ class LogoutView(APIView):
 
 # ========== (опционально) CBV для деталей комнаты – даёт полный CRUD для Room ==========
 # Если хочешь добавить, раскомментируй. Не обязательно, но плюс к требованию CRUD.
+class CanteenTableListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        tables = CanteenTable.objects.all()
+        serializer = CanteenTableSerializer(tables, many=True)
+        return Response(serializer.data)
+    
+class TableBookingCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        serializer = TableBookingCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            table = get_object_or_404(CanteenTable, id=serializer.validated_data['table_id'])
+            booking = TableBooking.objects.create(
+                user=request.user,
+                table=table,
+                booking_date=serializer.validated_data['booking_date'],
+                meal_time=serializer.validated_data['meal_time']
+            )
+            return Response({"message": "The table is reserved!"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def report_table_issue(request):
+    table_id = request.data.get('table_id')
+    desc = request.data.get('description')
+    return Response({"message": f"Complaint about the table {table_id} accepted"}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_table_status(request, table_id):
+    table = get_object_or_404(CanteenTable, id=table_id)
+    return Response({"table_number": table.table_number, "available": table.is_available})
+
+
+
+
 """
 class RoomDetailView(APIView):
     permission_classes = [IsAuthenticated]
