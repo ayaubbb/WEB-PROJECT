@@ -26,7 +26,8 @@ class Equipment(models.Model):
     name = models.CharField(max_length=100)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='equipment')
     is_working = models.BooleanField(default=True)
-
+    status = models.CharField(max_length=50, default="Available")
+    
     def __str__(self):
         return f"{self.name} in {self.room.number}"
     
