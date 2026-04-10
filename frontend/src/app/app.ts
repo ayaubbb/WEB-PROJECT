@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +9,13 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.css']
 })
 export class App {
+  private router = inject(Router);
+
+  logout() {
+    localStorage.removeItem('token'); 
+
+    this.router.navigate(['/login']);
+    
+    console.log('User logged out');
+  }
 }

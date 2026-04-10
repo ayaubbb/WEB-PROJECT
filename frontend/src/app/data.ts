@@ -13,10 +13,35 @@ export interface Room {
   providedIn: 'root'
 })
 export class DataService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000/api/rooms/';
+  private baseUrl = 'http://127.0.0.1:8000';
 
-  getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl);
+  constructor(private http: HttpClient) { }
+
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/token/`, credentials);
   }
+  
+  getRooms(): Observable<Room[]> {
+    return this.http.get<Room[]>(`${this.baseUrl}/rooms/`);
+  }
+
+  createBooking(data: any) {
+    return this.http.post(`${this.baseUrl}/bookings/`, data);
+  }
+
+  getUserBookings(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/my-bookings/`);
+  }
+
+  cancelBooking(id: number) {
+    return this.http.delete(`${this.baseUrl}/bookings/${id}/cancel/`);
+  }
+
+getCanteenTables() {
+  return this.http.get<any[]>(`${this.baseUrl}/api/canteen/tables/`);
+}
+
+bookCanteenTable(data: any) {
+  return this.http.post(`${this.baseUrl}/api/canteen/book/`, data);
+}
 }

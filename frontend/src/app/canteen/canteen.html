@@ -1,0 +1,19 @@
+<div class="canteen-container">
+  <h2>Booking Tables in the Canteen</h2>
+
+  @if (message) {
+    <p class="error">{{ message }}</p>
+  }
+
+  <div class="tables-grid">
+    @for (table of tables; track table.id) {
+      <div class="table-card">
+        <h3>Table No. {{ table.number }}</h3>
+        <p>Seats: {{ table.capacity }}</p>
+        <button (click)="bookTable(table.id)">Book this table</button>
+      </div>
+    } @empty {
+      <p>There are no free tables available at the moment.</p>
+    }
+  </div>
+</div>

@@ -1,1 +1,21 @@
-<h2>My Bookings page</h2>
+<div class="container">
+  <h2>My Bookings</h2>
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  <div class="booking-list">
+    @for (item of bookings; track item.id) {
+      <div class="booking-card">
+        <p><strong>Room:</strong> {{ item.room_id }}</p>
+        <p><strong>From:</strong> {{ item.start_time | date:'short' }}</p>
+        <p><strong>To:</strong> {{ item.end_time | date:'short' }}</p>
+        
+        <button (click)="deleteBooking(item.id)" class="btn-delete">Cancel</button>
+      </div>
+    } @empty {
+      <p>You have no active bookings.</p>
+    }
+  </div>
+</div>
