@@ -16,4 +16,6 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('api/canteen/report/', report_table_issue),
     path('api/canteen/status/<int:table_id>/', get_table_status),
+    path('equipment/', views.get_equipment),
+    path('rooms/<int:pk>/', views.RoomDetailView.as_view(), name='room-detail'),
 ]

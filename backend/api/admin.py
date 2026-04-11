@@ -7,7 +7,7 @@ class RoomAdmin(admin.ModelAdmin):
     
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'status', 'room')
+    list_display = ('name', 'is_working', 'room')
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
