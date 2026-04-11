@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
+  isLoading = false;
+  errorMessage = '';
+
   credentials = { username: '', password: '' };
 
   constructor(
@@ -18,15 +21,19 @@ export class LoginComponent {
   ) {}
 
   onLogin() {
+    this.isLoading = true;
+    this.errorMessage = '';
+
     this.dataService.login(this.credentials).subscribe({
       next: (response: any) => {
         localStorage.setItem('token', response.access); 
         this.router.navigate(['/rooms']); 
         
-        console.log('Мы вошли!');
+        console.log('Successfully logged in');
       },
       error: (err) => {
-        console.error('Ошибка входа', err);
+        console.error('Login error', err);
+        this.errorMessage = 'Invalid username or password';
       }
     });
   }

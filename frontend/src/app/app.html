@@ -1,11 +1,12 @@
 <h1>SmartDorm</h1>
-<nav>
-  <a routerLink="/rooms">Комнаты</a> |
-  <a routerLink="/canteen">Столовая</a> |
-  <a routerLink="/my-bookings">Мои бронирования</a> |
-  
-  <button (click)="logout()">Выйти</button>
-</nav>
+@if (isLoggedIn()) {
+  <nav>
+    <a routerLink="/rooms">Rooms</a> |
+    <a routerLink="/canteen">Canteen</a> |
+    <a routerLink="/my-bookings">My Bookings</a> |
+    <button (click)="logout()">Logout</button>
+  </nav>
+}
 
 <hr>
 <router-outlet></router-outlet>

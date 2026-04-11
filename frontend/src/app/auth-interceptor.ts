@@ -1,7 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  
   const token = localStorage.getItem('token'); 
 
   if (token) {
@@ -11,10 +10,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${token}` 
       }
     });
-    console.log('Интерцептор работает: токен добавлен');
+    console.log('Interceptor working, token added to request');
     return next(clonedReq);
   }
 
-  console.warn('Интерцептор: токен не найден в localStorage');
+  console.warn('Interceptor: token not found in localStorage');
   return next(req);
 };
+
+

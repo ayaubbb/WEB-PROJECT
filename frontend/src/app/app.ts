@@ -18,4 +18,8 @@ export class App {
     
     console.log('User logged out');
   }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token'); 
+  }
 }

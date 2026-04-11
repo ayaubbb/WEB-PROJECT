@@ -1,7 +1,13 @@
 <h2>Login page</h2>
 <form (ngSubmit)="onLogin()">
-  <input [(ngModel)]="credentials.username" name="username" placeholder="Логин">
-  <input type="password" [(ngModel)]="credentials.password" name="password" placeholder="Пароль">
+  <input [(ngModel)]="credentials.username" name="username" placeholder="Username">
+  <input type="password" [(ngModel)]="credentials.password" name="password" placeholder="Password">
   
-  <button type="submit">Войти</button>
+  <button type="submit" [disabled]="isLoading">
+    {{ isLoading ? 'Logging in...' : 'Login' }}
+  </button>
+
+  @if (errorMessage) { 
+    <p class="error" style="color: red;">{{ errorMessage }}</p> 
+  }
 </form>

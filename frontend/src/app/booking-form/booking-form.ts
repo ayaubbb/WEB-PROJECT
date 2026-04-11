@@ -18,6 +18,7 @@ export class BookingFormComponent {
   message = '';
 
   book() {
+    this.message = '';
     const bookingData = {
       room_id: this.roomId,
       start_time: this.startTime,
@@ -29,8 +30,11 @@ export class BookingFormComponent {
         this.message = 'Booking successful!';
       },
       error: (err) => {
-        console.error(err);
-        this.message = 'Error creating booking';
+        if (err.status === 400 && err.error) {
+          this.message = err.error.non_field_errors || err.error.detail || 'This time slot is already booked';
+        } else {
+          this.message = 'An error occurred while creating the booking';
+        }
       }
     });
   }
