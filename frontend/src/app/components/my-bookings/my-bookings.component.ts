@@ -1,0 +1,33 @@
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-my-bookings',
+  imports: [],
+  templateUrl: './my-bookings.html',
+  styleUrl: './my-bookings.css',
+})
+export class MyBookingsComponent {
+  bookings: any[] = [];
+  editingBookingId: number | null = null; // Храним ID редактируемой брони
+
+  constructor(private http: HttpClient) {
+    this.loadBookings();
+  }
+
+  loadBookings() {
+    this.http.get<any[]>('http://127.0.0.1:8000/my-bookings/').subscribe(data => {
+      this.bookings = data;
+    });
+  }
+
+  // Метод для сохранения изменений (PUT)
+  saveChanges(id: number, newTime: string) {
+    this.http.put(`http://127.0.0.1:8000/bookings/${id}/update/`, {
+      start_time: newTime
+    }).subscribe(() => {
+      this.editingBookingId = null;
+      this.loadBookings(); // Обновляем список
+    });
+  }
+}

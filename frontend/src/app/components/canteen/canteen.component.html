@@ -1,0 +1,14 @@
+<div class="tables-grid">
+  @for (table of tables; track table.id) {
+    <div class="table-card" [class.occupied]="table.is_occupied">
+      <h3>{{ table.number }}</h3>
+      <button 
+        [disabled]="table.is_occupied" 
+        (click)="bookTable(table)">
+        {{ table.is_occupied ? 'Занято' : 'Забронировать' }}
+      </button>
+    </div>
+  } @empty {
+    <p>Столов пока нет.</p>
+  }
+</div>
