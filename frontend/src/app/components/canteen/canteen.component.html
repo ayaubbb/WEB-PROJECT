@@ -5,10 +5,10 @@
       <button 
         [disabled]="table.is_occupied" 
         (click)="bookTable(table)">
-        {{ table.is_occupied ? 'Занято' : 'Забронировать' }}
+        {{ table.is_occupied ? 'Busy' : 'Book' }}
       </button>
     </div>
   } @empty {
-    <p>Столов пока нет.</p>
+    <p>There are no tables yet.</p>
   }
 </div>
