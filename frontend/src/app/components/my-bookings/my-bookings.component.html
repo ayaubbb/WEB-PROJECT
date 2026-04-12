@@ -1,20 +1,20 @@
 <p>my-bookings works!</p>
-<h2>Мои бронирования</h2>
+<h2>My Bookings</h2>
 <div class="list">
   @for (b of bookings; track b.id) {
     <div class="card">
-      <p>Комната: {{ b.room_number }}</p>
+      <p>Room: {{ b.room_number }}</p>
       
       @if (editingBookingId === b.id) {
         <input #timeInput type="datetime-local" [value]="b.start_time">
         <button (click)="saveChanges(b.id, timeInput.value)">OK</button>
-        <button (click)="editingBookingId = null">Отмена</button>
+        <button (click)="editingBookingId = null">Cancel</button>
       } @else {
-        <p>Время: {{ b.start_time | date:'short' }}</p>
-        <button (click)="editingBookingId = b.id">Изменить время</button>
+        <p>Time: {{ b.start_time | date:'short' }}</p>
+        <button (click)="editingBookingId = b.id">Change the time</button>
       }
     </div>
   } @empty {
-    <p>Ничего не найдено. Вы еще ничего не бронировали.</p>
+    <p>Nothing was found. You haven't booked anything yet.</p>
   }
 </div>
