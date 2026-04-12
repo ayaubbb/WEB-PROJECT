@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('frontend');
+  private router = inject(Router);
+
+  logout() {
+    localStorage.removeItem('token'); 
+
+    this.router.navigate(['/login']);
+    
+    console.log('User logged out');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token'); 
+  }
 }

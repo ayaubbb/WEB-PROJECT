@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.utils import timezone
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,10 +39,15 @@ class BookingCreateSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     start_time = serializers.DateTimeField()
     end_time = serializers.DateTimeField()
-
+    
+    def validate_start_time(self, value):
+        if value < timezone.now():
+            raise serializers.ValidationError("You can't book for past times!")
+        return value
+    
     def validate(self, data):
         if data['start_time'] >= data['end_time']:
-            raise serializers.ValidationError("Время начала должно быть раньше окончания")
+            raise serializers.ValidationError("Start time must be before end time")
         return data
     
 class CanteenTableSerializer(serializers.ModelSerializer):

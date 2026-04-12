@@ -26,7 +26,7 @@ class Equipment(models.Model):
     name = models.CharField(max_length=100)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='equipment')
     is_working = models.BooleanField(default=True)
-
+    
     def __str__(self):
         return f"{self.name} in {self.room.number}"
     
@@ -53,7 +53,19 @@ class TableBooking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     table = models.ForeignKey(CanteenTable, on_delete=models.CASCADE)
     booking_date = models.DateField()
-    meal_time = models.CharField(max_length=50)
+    
+    MEAL_CHOICES = [
+        ('Breakfast', 'Breakfast: 6:30 a.m. - 9:00 a.m.'),
+        ('Lunch', 'Lunch: 11:00 a.m. - 1:00 p.m.'),
+        ('Dinner', 'Dinner: 5:00 p.m. - 7:00 p.m.'),
+    ]
+    
+    meal_time = models.CharField(
+        max_length=50,
+        choices=MEAL_CHOICES,
+        default='Breakfast'
+    )
+    
     
     def __str__(self):
         return f"{self.user.username} - Table {self.table.table_number} at {self.meal_time}"
