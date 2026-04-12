@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MyBookingsComponent {
   bookings: any[] = [];
-  editingBookingId: number | null = null; // Храним ID редактируемой брони
+  editingBookingId: number | null = null; 
 
   constructor(private http: HttpClient) {
     this.loadBookings();
@@ -21,13 +21,12 @@ export class MyBookingsComponent {
     });
   }
 
-  // Метод для сохранения изменений (PUT)
   saveChanges(id: number, newTime: string) {
     this.http.put(`http://127.0.0.1:8000/bookings/${id}/update/`, {
       start_time: newTime
     }).subscribe(() => {
       this.editingBookingId = null;
-      this.loadBookings(); // Обновляем список
+      this.loadBookings(); 
     });
   }
 }
