@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { DataService } from '../data'; // Твой сервис
+import { DataService } from '../data'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -29,7 +29,6 @@ export class CanteenComponent implements OnInit {
   }
 
   bookTable(tableId: number) {
-    // В столовой обычно бронируют просто по ID стола
     this.dataService.bookCanteenTable({ table_id: tableId }).subscribe({
       next: () => alert('Table booked successfully!'),
       error: () => alert('Failed to book table')
