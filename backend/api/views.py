@@ -10,29 +10,44 @@ from rest_framework import generics
 
 class RoomListView(APIView):
     permission_classes = [AllowAny]
-
+ 
     def get(self, request):
         rooms = Room.objects.all()
         serializer = RoomSerializer(rooms, many=True)
         return Response(serializer.data)
-
+ 
+ 
+class RoomDetailView(generics.RetrieveAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+ 
+ 
 class BookingCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-
+ 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+ 
+    def get(self, request):
+        bookings = Booking.objects.select_related('room', 'user').all()
+        serializer = BookingSerializer(bookings, many=True)
+        return Response(serializer.data)
+ 
     def post(self, request):
         serializer = BookingCreateSerializer(data=request.data)
         if serializer.is_valid():
             room_id = serializer.validated_data['room_id']
-            start = serializer.validated_data['start_time']
-            end = serializer.validated_data['end_time']
-            room = get_object_or_404(Room, id=room_id)
-
+            start   = serializer.validated_data['start_time']
+            end     = serializer.validated_data['end_time']
+            room    = get_object_or_404(Room, id=room_id)
+ 
             if Booking.objects.filter(room=room, start_time__lt=end, end_time__gt=start).exists():
                 return Response(
                     {"error": "The room is already occupied at the selected time."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
+ 
             booking = Booking.objects.create(
                 user=request.user,
                 room=room,
@@ -40,51 +55,40 @@ class BookingCreateView(APIView):
                 end_time=end
             )
             return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
+ 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+ 
+ 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     if booking.user != request.user:
-        return Response(
-            {"error": "You can't cancel someone else's reservation."},
-            status=status.HTTP_403_FORBIDDEN
-        )
+        return Response({"error": "You can't cancel someone else's reservation."}, status=status.HTTP_403_FORBIDDEN)
     booking.delete()
     return Response({"message": "The reservation has been successfully cancelled."}, status=status.HTTP_200_OK)
-
+ 
+ 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_issue(request):
     equipment_id = request.data.get('equipment_id')
-    title = request.data.get('title')
-    description = request.data.get('description')
-
+    title        = request.data.get('title')
+    description  = request.data.get('description')
     if not all([equipment_id, title, description]):
-        return Response(
-            {"error": "The equipment_id, title, and description fields are required."},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
+        return Response({"error": "equipment_id, title, and description are required."}, status=status.HTTP_400_BAD_REQUEST)
     equipment = get_object_or_404(Equipment, id=equipment_id)
-    issue = IssueReport.objects.create(
-        user=request.user,
-        equipment=equipment,
-        title=title,
-        description=description
-    )
-    serializer = IssueReportSerializer(issue)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    issue = IssueReport.objects.create(user=request.user, equipment=equipment, title=title, description=description)
+    return Response(IssueReportSerializer(issue).data, status=status.HTTP_201_CREATED)
+ 
+ 
 class UserBookingDetailView(APIView):
     permission_classes = [IsAuthenticated]
-
+ 
     def get(self, request):
         bookings = Booking.objects.filter(user=request.user)
-        serializer = BookingSerializer(bookings, many=True)
-        return Response(serializer.data)
-
+        return Response(BookingSerializer(bookings, many=True).data)
+ 
     def put(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id, user=request.user)
         serializer = BookingSerializer(booking, data=request.data, partial=True)
@@ -92,58 +96,51 @@ class UserBookingDetailView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+ 
+ 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-
+ 
+ 
 class CanteenTableListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        tables = CanteenTable.objects.all()
-        serializer = CanteenTableSerializer(tables, many=True)
-        return Response(serializer.data)
-    
+        return Response(CanteenTableSerializer(CanteenTable.objects.all(), many=True).data)
+ 
+ 
 class TableBookingCreateView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = TableBookingCreateSerializer(data=request.data)
         if serializer.is_valid():
             table = get_object_or_404(CanteenTable, id=serializer.validated_data['table_id'])
-            booking = TableBooking.objects.create(
-                user=request.user,
-                table=table,
+            TableBooking.objects.create(user=request.user, table=table,
                 booking_date=serializer.validated_data['booking_date'],
-                meal_time=serializer.validated_data['meal_time']
-            )
+                meal_time=serializer.validated_data['meal_time'])
             return Response({"message": "The table is reserved!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+ 
+ 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def report_table_issue(request):
     table_id = request.data.get('table_id')
-    desc = request.data.get('description')
     return Response({"message": f"Complaint about the table {table_id} accepted"}, status=status.HTTP_201_CREATED)
-
+ 
+ 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_table_status(request, table_id):
     table = get_object_or_404(CanteenTable, id=table_id)
     return Response({"table_number": table.table_number, "available": table.is_available})
-
+ 
+ 
 @api_view(['GET'])
 def get_equipment(request):
-    equip = Equipment.objects.all()
-    serializer = EquipmentSerializer(equip, many=True)
-    return Response(serializer.data)
-
-class RoomDetailView(generics.RetrieveAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
-
+    return Response(EquipmentSerializer(Equipment.objects.all(), many=True).data)
+ 
 
 """
 class RoomDetailView(APIView):

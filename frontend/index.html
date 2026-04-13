@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <script src="auth-guard.js"></script>
+    <title>SmartDorm</title>
+</head>
+<body>
+    <div class="main-container">
+        <aside class="sidebar">
+            
+            <div class="logo-wrapper">
+                <div class="custom-logo">
+                    <span class="logo-sd"><img src="assets/icons/sd.png" alt="SD" class="sd-img"></span>
+                    <span class="star-mini">✦</span>
+                    <span class="logo-smart">Smart</span><span class="logo-dorm">Dorm</span>
+                    <span class="star-big">★</span>
+                </div>
+            </div>
+            
+            <nav class="menu">
+                <a href="#" class="menu-item active" data-page="dashboard">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+                <a href="#" class="menu-item" data-page="rooms">
+                    <i class="fa-solid fa-bed"></i> Rooms & Booking
+                </a>
+                <a href="#" class="menu-item" data-page="canteen">
+                    <i class="fa-solid fa-utensils"></i> Canteen
+                </a>
+                <a href="#" class="menu-item" data-page="equipment">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Equipment
+                </a>
+                <a href="#" class="menu-item" data-page="reports">
+                    <i class="fa-solid fa-file-lines"></i> My Reports
+                </a>
+                <a href="#" class="menu-item" data-page="support">
+                    <i class="fa-solid fa-circle-question"></i> Support
+                </a>
+            </nav>
+            <div class="user-bottom">
+                <img src="https://ui-avatars.com/api/?name=User&background=00C9B1&color=fff&rounded=true" alt="avatar" class="avatar" id="user-avatar">
+                <span id="username-display">Loading...</span>
+                <i class="fa-solid fa-arrow-right-from-bracket logout-icon" id="logout-btn" style="cursor: pointer; margin-left: auto;"></i>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <header class="top-header">
+                <h1 id="page-title">Dashboard</h1>
+
+                <div class="user-profile-header">
+                    <div class="user-info-text">
+                        <span class="user-name-text" id="username-display">Loading...</span>
+                        <span class="user-status-text">Student</span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=00C9B1&color=fff&rounded=true" 
+                        alt="avatar" class="header-avatar" id="header-user-avatar">
+                </div>
+            </header>
+            
+            <section id="page-content">
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

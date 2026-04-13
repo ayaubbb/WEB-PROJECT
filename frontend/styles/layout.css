@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+}
+
+.main-container {
+    display: flex;
+    height: auto;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: var(--dark-bg);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+}
+
+.content-area {
+    flex-grow: 1; 
+    padding: 30px;
+    overflow-y: auto; 
+}

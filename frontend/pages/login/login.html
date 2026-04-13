@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartDorm — Login</title>
+    <link rel="stylesheet" href="../login/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-bg">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="brand">
+                <div class="brand-icon">SD</div>
+                <div>
+                    <div class="brand-name">SmartDorm<span class="star">★</span></div>
+                    <div class="brand-sub">Dormitory Management System</div>
+                </div>
+            </div>
+
+            <div id="error-msg" class="error-msg" style="display:none"></div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="login">Sign In</button>
+                <button class="tab" data-tab="guest">Continue as Guest</button>
+            </div>
+
+            <div id="tab-login" class="tab-content active">
+                <form id="login-form">
+                    <div class="field">
+                        <label>Username</label>
+                        <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username">
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn-primary" id="login-btn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loader" style="display:none">...</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="tab-guest" class="tab-content">
+                <div class="guest-info">
+                    <div class="guest-icon">👤</div>
+                    <p>You can browse rooms and view bookings without an account.<br>
+                    <strong>Creating bookings requires login.</strong></p>
+                </div>
+                <button class="btn-secondary" id="guest-btn">Continue as Guest</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../login/login.js"></script>
+</body>
+</html>

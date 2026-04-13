@@ -3,11 +3,24 @@ from .models import *
 from django.utils import timezone
 
 class RoomSerializer(serializers.ModelSerializer):
+    is_busy = serializers.SerializerMethodField()
+    name = serializers.CharField(source='number')
+    
     class Meta:
         model = Room
         fields = '__all__'
+        
+    def get_is_busy(self, obj):
+        now = timezone.now()
+        return Booking.objects.filter(
+            room=obj,
+            start_time__lt=now,
+            end_time__gt=now
+        ).exists()
 
 class BookingSerializer(serializers.ModelSerializer):
+    room_name = serializers.CharField(source='room.number', read_only=True)
+    user_name  = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Booking
         fields = '__all__'

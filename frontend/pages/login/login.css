@@ -1,0 +1,133 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0d1117;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e2e8f0;
+}
+
+.login-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 20% 50%, #0f3d38 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, #1a4a3a 0%, transparent 50%),
+                #0d1117;
+}
+.grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(38,166,154,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38,166,154,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.login-wrapper { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 20px; }
+
+.login-card {
+    background: rgba(15, 25, 35, 0.9);
+    border: 1px solid rgba(38,166,154,0.2);
+    border-radius: 20px;
+    padding: 36px 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    animation: cardIn 0.5s ease;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.brand {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+}
+.brand-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, #26a69a, #1d7a72);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 16px; color: white;
+    box-shadow: 0 4px 15px rgba(38,166,154,0.4);
+}
+.brand-name {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 20px; color: #f1f5f9;
+}
+.star { color: #26a69a; }
+.brand-sub { font-size: 11px; color: #64748b; margin-top: 2px; letter-spacing: 0.5px; }
+
+.error-msg {
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5; padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; margin-bottom: 16px;
+}
+
+.tabs {
+    display: flex; gap: 4px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px; padding: 4px;
+    margin-bottom: 24px;
+}
+.tab {
+    flex: 1; padding: 9px; border: none; border-radius: 8px;
+    background: transparent; color: #64748b;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+}
+.tab.active { background: #26a69a; color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 12px; font-weight: 500; color: #94a3b8; margin-bottom: 6px; letter-spacing: 0.3px; }
+.field input {
+    width: 100%; padding: 11px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9;
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+.field input:focus {
+    border-color: rgba(38,166,154,0.5);
+    box-shadow: 0 0 0 3px rgba(38,166,154,0.12);
+}
+.field input::placeholder { color: #475569; }
+
+.btn-primary {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, #26a69a, #1d8a80);
+    border: none; border-radius: 10px;
+    color: white; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 8px;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 4px 15px rgba(38,166,154,0.35);
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary {
+    width: 100%; padding: 12px;
+    background: transparent;
+    border: 1px solid rgba(38,166,154,0.4);
+    border-radius: 10px; color: #26a69a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; margin-top: 8px;
+    transition: background 0.2s, border-color 0.2s;
+}
+.btn-secondary:hover { background: rgba(38,166,154,0.08); border-color: #26a69a; }
+
+.guest-info {
+    text-align: center; padding: 20px 0 10px;
+    color: #94a3b8; font-size: 14px; line-height: 1.6;
+}
+.guest-icon { font-size: 40px; margin-bottom: 12px; }
+.guest-info strong { color: #e2e8f0; }

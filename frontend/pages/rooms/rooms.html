@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="pages/rooms/rooms.css">
+
+<div class="rooms-container">
+    <div class="rooms-header">
+        <h2 class="section-title">Explore Rooms & Book</h2>
+    </div>
+
+    <div class="rooms-map-card">
+        <div id="dynamic-map-grid" class="map-grid">
+            </div>
+    </div>
+
+    <div class="booking-management">
+        <div class="bookings-view">
+            <div class="view-header">
+                <h3>View all bookings</h3>
+            </div>
+            <div class="view-content">
+                <div class="category-list">
+                    <div class="cat-item active">1-person</div>
+                    <div class="cat-item">2-person</div>
+                    <div class="cat-item">3-person</div>
+                    <div class="cat-item">4-person</div>
+                </div>
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Room</th>
+                            <th>User</th>
+                            <th>Start</th>
+                            <th>End</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-log-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="create-booking">
+            <h3>Create New Booking</h3>
+            <form class="booking-form" id="main-booking-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Full Name" id="booking-name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Room Number</label>
+                        <select id="room-select">
+                            </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Check-in Time</label>
+                        <input type="datetime-local" id="check-in">
+                    </div>
+                    <div class="form-group">
+                        <label>Check-out Time</label>
+                        <input type="datetime-local" id="check-out">
+                    </div>
+                </div>
+                <button type="submit" class="btn-confirm">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+</div>
