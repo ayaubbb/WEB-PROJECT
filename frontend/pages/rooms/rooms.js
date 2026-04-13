@@ -141,7 +141,7 @@ function initBookingForm(username) {
                 const err = await res.json().catch(() => ({}));
                 throw new Error(err.error || err.detail || `HTTP ${res.status}`);
             }
- 
+
             showNotification('Booking confirmed!', 'success');
             form.reset();
             document.getElementById('booking-name').value = username;

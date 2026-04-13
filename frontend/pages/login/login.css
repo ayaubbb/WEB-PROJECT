@@ -2,37 +2,37 @@
 
 body {
     font-family: 'DM Sans', sans-serif;
-    background: #0d1117;
+    background: #f8fafc;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #e2e8f0;
+    color: #1e293b;
 }
 
 .login-bg {
     position: fixed; inset: 0; z-index: 0;
-    background: radial-gradient(ellipse at 20% 50%, #0f3d38 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, #1a4a3a 0%, transparent 50%),
-                #0d1117;
+    background: radial-gradient(ellipse at 20% 50%, #80dac9 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, #1e293b 0%, transparent 50%),
+                #f8fafc;
 }
 .grid-overlay {
     position: absolute; inset: 0;
     background-image:
-        linear-gradient(rgba(38,166,154,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(38,166,154,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(38,166,154,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38,166,154,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
 .login-wrapper { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 20px; }
 
 .login-card {
-    background: rgba(15, 25, 35, 0.9);
-    border: 1px solid rgba(38,166,154,0.2);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 20px;
     padding: 36px 32px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,1);
     animation: cardIn 0.5s ease;
 }
 
@@ -41,34 +41,73 @@ body {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.brand {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 28px;
+
+.custom-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    letter-spacing: -0.6px;
 }
-.brand-icon {
-    width: 48px; height: 48px; border-radius: 12px;
-    background: linear-gradient(135deg, #26a69a, #1d7a72);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 16px; color: white;
-    box-shadow: 0 4px 15px rgba(38,166,154,0.4);
+
+.logo-sd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;  
+    height: 42px; 
+    background: linear-gradient(135deg, #1B253F, #26a69a);
+    border-radius: 10px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
 }
-.brand-name {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 20px; color: #f1f5f9;
+
+.sd-img {
+    width: 65%; 
+    height: auto;
+    object-fit: contain;
 }
-.star { color: #26a69a; }
-.brand-sub { font-size: 11px; color: #64748b; margin-top: 2px; letter-spacing: 0.5px; }
+
+.logo-smart { color: #1e293b }
+.logo-dorm { color: #26a69a; }
+
+.star-mini {
+    position: absolute;
+    top: 4px; left: 22px;
+    font-size: 8px; color: #1e293b;
+}
+
+.star-big {
+    color: #26a69a;
+    font-size: 16px;
+    margin-left: 4px;
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+.brand-sub { 
+    font-size: 11px; 
+    color: #64748b; 
+    margin-bottom: 15px; 
+    margin-left: 54px; 
+    margin-top: -10px;
+    letter-spacing: 0.5px; 
+}
 
 .error-msg {
-    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+    background: #fef2f2;
+    border: 1px solid rgba(239,68,68,0.3);
     color: #fca5a5; padding: 10px 14px; border-radius: 8px;
     font-size: 13px; margin-bottom: 16px;
 }
 
 .tabs {
     display: flex; gap: 4px;
-    background: rgba(255,255,255,0.04);
+    background: #f1f5f9;
     border-radius: 10px; padding: 4px;
     margin-bottom: 24px;
 }
@@ -86,9 +125,9 @@ body {
 .field label { display: block; font-size: 12px; font-weight: 500; color: #94a3b8; margin-bottom: 6px; letter-spacing: 0.3px; }
 .field input {
     width: 100%; padding: 11px 14px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px; color: #f1f5f9;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px; color: #1e293b;
     font-family: 'DM Sans', sans-serif; font-size: 14px;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
@@ -116,7 +155,7 @@ body {
 .btn-secondary {
     width: 100%; padding: 12px;
     background: transparent;
-    border: 1px solid rgba(38,166,154,0.4);
+    border: 1px solid #26a69a;
     border-radius: 10px; color: #26a69a;
     font-family: 'DM Sans', sans-serif;
     font-size: 14px; font-weight: 500;
@@ -130,4 +169,4 @@ body {
     color: #94a3b8; font-size: 14px; line-height: 1.6;
 }
 .guest-icon { font-size: 40px; margin-bottom: 12px; }
-.guest-info strong { color: #e2e8f0; }
+.guest-info strong { color: #1e293b; }
