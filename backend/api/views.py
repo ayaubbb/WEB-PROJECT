@@ -7,6 +7,12 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .serializers import *
 from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Booking, CanteenTable, IssueReport
+from .models import TableBooking
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 
 class RoomListView(APIView):
     permission_classes = [AllowAny]
@@ -140,6 +146,56 @@ def get_table_status(request, table_id):
 @api_view(['GET'])
 def get_equipment(request):
     return Response(EquipmentSerializer(Equipment.objects.all(), many=True).data)
+
+@api_view(['GET'])
+def dashboard_stats(request):
+    active_bookings = Booking.objects.count()
+
+    total_tables = CanteenTable.objects.count()
+    available_tables = CanteenTable.objects.filter(is_available=True).count()
+    canteen_percent = int((available_tables / total_tables) * 100) if total_tables > 0 else 0
+    open_reports = IssueReport.objects.count()
+
+    bookings_by_date = (
+        Booking.objects.annotate(date=TruncDate('start_time'))
+        .values('date')
+        .annotate(count=Count('id'))
+        .order_by('date')[:7] 
+    )
+    canteen_data = list(CanteenTable.objects.values('table_number', 'is_available'))
+    
+    actions = []
+    recent_room_bookings = Booking.objects.order_by('-id')[:3]
+    for b in recent_room_bookings:
+        actions.append({
+            "user": b.user.username,
+            "text": f"booked Room {b.room.number}",
+            "time": b.start_time.strftime("%H:%M") 
+        })
+
+    recent_issues = IssueReport.objects.order_by('-created_at')[:2]
+    for issue in recent_issues:
+        actions.append({
+            "user": issue.user.username,
+            "text": f"reported an issue: {issue.title}",
+            "time": issue.created_at.strftime("%H:%M")
+        })
+    return Response({
+        "active_bookings": active_bookings,
+        "canteen_percent": canteen_percent,
+        "open_reports": open_reports,
+        "cards": {
+            "rooms": active_bookings,
+            "canteen": canteen_percent,
+            "reports": open_reports
+        },
+        "charts": {
+            "rooms": [item['count'] for item in bookings_by_date],
+            "canteen": [100 if t['is_available'] else 20 for t in canteen_data],
+            "reports": [5, 10, 2, 8]
+        },
+        "latest_actions": actions
+    })
  
 
 """

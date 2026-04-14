@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [],
-  templateUrl: './my-bookings.html',
-  styleUrl: './my-bookings.css',
+  imports: [DatePipe],
+  templateUrl: './my-bookings.component.html',
+  styleUrl: './my-bookings.component.css',
 })
 export class MyBookingsComponent {
   bookings: any[] = [];
