@@ -1,0 +1,33 @@
+<div class="page-container">
+    <div class="header-row">
+        <h2>Dorm Equipment Status</h2>
+        <button class="btn-secondary"><i class="fa-solid fa-file-signature"></i> Report Fault</button>
+    </div>
+
+    <div class="card table-card">
+        <div class="table-filters">
+            <div class="filter-group">
+                <label>Filter</label>
+                <select><option>All owners</option></select>
+            </div>
+            <div class="search-group">
+                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>Equipment Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="equipment-list">
+                </tbody>
+        </table>
+    </div>
+</div>
