@@ -18,4 +18,5 @@ urlpatterns = [
     path('api/canteen/report/', report_table_issue),
     path('api/canteen/status/<int:table_id>/', get_table_status),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('dashboard-stats/', views.dashboard_stats, name='dashboard-stats'),
 ]

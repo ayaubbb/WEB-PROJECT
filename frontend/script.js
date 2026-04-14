@@ -41,11 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 pageInterval = setInterval(() => {
                     if (document.querySelector('.tables-layout')) renderTables();
                 }, 5000);
+            } else if (pageName === 'dashboard') {
+                const { initDashboardPage } = await import('./pages/dashboard/dashboard.js');
+                await initDashboardPage();
             }
         } catch (err) {
             contentArea.innerHTML = '<h2>Page not found</h2>';
             console.error(err);
         }
+
     };
 
     function renderEquipment() {
@@ -152,5 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     
+loadPage('dashboard');
 
+
+function showDbDetails(type) {
+    const details = document.getElementById('db-details');
+    const title = document.getElementById('db-chart-name');
+    
+    if (details) details.classList.remove('db-hidden');
+    
+    if (type === 'rooms') title.innerText = 'Room Availability Overview';
+    if (type === 'canteen') title.innerText = 'Canteen Usage Statistics';
+    if (type === 'reports') title.innerText = 'Equipment Issue History';
+
+    document.querySelectorAll('.db-card').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
 });
