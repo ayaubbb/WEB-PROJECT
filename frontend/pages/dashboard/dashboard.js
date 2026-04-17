@@ -46,8 +46,6 @@ export const initDashboardPage = async () => {
                 
                 const label = card.querySelector('.card-label').textContent;
                 if (detailTitle) detailTitle.textContent = label;
-
-                renderSimpleChart(chartContainer, data.charts[type]);
             });
         });
 
@@ -96,7 +94,6 @@ function renderSimpleChart(container, heights) {
         `;
     }).join('');
 
-    // Настраиваем сам контейнер
     container.style.display = 'flex';
     container.style.alignItems = 'flex-end'; // Контейнер держит всё внизу
     container.style.justifyContent = 'space-around';

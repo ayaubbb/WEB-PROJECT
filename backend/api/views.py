@@ -9,10 +9,13 @@ from .serializers import *
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Booking, CanteenTable, IssueReport
+from .models import Booking, CanteenTable, IssueReport, TableBooking
 from .models import TableBooking
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import IssueReport
 
 class RoomListView(APIView):
     permission_classes = [AllowAny]
@@ -76,7 +79,7 @@ def cancel_booking(request, booking_id):
  
  
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_issue(request):
     equipment_id = request.data.get('equipment_id')
     title        = request.data.get('title')
@@ -149,11 +152,18 @@ def get_equipment(request):
 
 @api_view(['GET'])
 def dashboard_stats(request):
-    active_bookings = Booking.objects.count()
+    from datetime import date 
 
+    active_bookings = Booking.objects.count()
     total_tables = CanteenTable.objects.count()
-    available_tables = CanteenTable.objects.filter(is_available=True).count()
-    canteen_percent = int((available_tables / total_tables) * 100) if total_tables > 0 else 0
+  
+    occupied_today = TableBooking.objects.filter(booking_date=date.today()).count()
+    if total_tables > 0:
+        available_count = total_tables - occupied_today
+        canteen_percent = int((available_count / total_tables) * 100)
+    else:
+        canteen_percent = 0
+        
     open_reports = IssueReport.objects.count()
 
     bookings_by_date = (
@@ -165,21 +175,34 @@ def dashboard_stats(request):
     canteen_data = list(CanteenTable.objects.values('table_number', 'is_available'))
     
     actions = []
+
     recent_room_bookings = Booking.objects.order_by('-id')[:3]
     for b in recent_room_bookings:
         actions.append({
             "user": b.user.username,
             "text": f"booked Room {b.room.number}",
-            "time": b.start_time.strftime("%H:%M") 
+            "time": b.start_time.strftime("%H:%M"),
+            "category": "rooms" 
         })
 
     recent_issues = IssueReport.objects.order_by('-created_at')[:2]
     for issue in recent_issues:
         actions.append({
             "user": issue.user.username,
-            "text": f"reported an issue: {issue.title}",
-            "time": issue.created_at.strftime("%H:%M")
+            "text": f"reported: {issue.title}",
+            "time": issue.created_at.strftime("%H:%M"),
+            "category": "reports" 
         })
+
+    recent_table_bookings = TableBooking.objects.select_related('user', 'table').order_by('-id')[:3]
+    for tb in recent_table_bookings:
+        actions.append({
+            "user": tb.user.username,
+            "text": f"booked Table #{tb.table.table_number} ({tb.meal_time})",
+            "time": "Today", 
+            "category": "canteen" 
+        })
+
     return Response({
         "active_bookings": active_bookings,
         "canteen_percent": canteen_percent,
@@ -196,8 +219,20 @@ def dashboard_stats(request):
         },
         "latest_actions": actions
     })
- 
 
+def issue_reports_api(request):
+    reports = IssueReport.objects.all().order_by('-created_at')
+    
+    data = []
+    for r in reports:
+        data.append({
+            "user": r.user.username,
+            "text": r.title,
+            "category": getattr(r, 'category', 'equipment') or 'equipment',
+            "time": r.created_at.strftime("%H:%M")
+        })
+    
+    return JsonResponse({"latest_actions": data})
 """
 class RoomDetailView(APIView):
     permission_classes = [IsAuthenticated]

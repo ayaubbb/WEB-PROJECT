@@ -32,12 +32,19 @@ class Equipment(models.Model):
     
 
 class IssueReport(models.Model):
+    CATEGORY_CHOICES = [
+        ('Canteen', 'Canteen & Dining'),
+        ('Room', 'Room & Booking'),
+        ('Equipment', 'Equipment'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
+    equipment = models.ForeignKey('Equipment', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='Equipment')
     def __str__(self):
         return f"{self.title} by {self.user.username}"
     

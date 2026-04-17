@@ -1,7 +1,6 @@
 .dashboard-container { padding: 20px; }
 .dashboard-header { margin-bottom: 20px; }
 
-/* Сетка карточек */
 .stats-grid { 
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
@@ -10,7 +9,7 @@
 }
 
 .stat-card {
-    background: #e3f2fd; /* Тот самый светло-голубой */
+    background: #e3f2fd; 
     padding: 24px;
     border-radius: 15px;
     display: flex;
@@ -20,9 +19,8 @@
     border: 1px solid transparent;
 }
 
-/* Эффект при наведении и нажатии */
 .stat-card:hover, .stat-card.active {
-    background: #26a69a; /* Бирюзовый как в Rooms */
+    background: #26a69a; 
     color: white;
     transform: translateY(-3px);
 }
@@ -35,14 +33,12 @@
 
 .stat-card:hover .card-icon, .stat-card.active .card-icon { opacity: 1; }
 
-/* Нижние блоки */
 .dashboard-details { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
 .details-view { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
 .view-header { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; }
 .view-header h3 { font-size: 16px; color: #1e293b; }
 .view-content { padding: 20px; min-height: 250px; }
 
-/* Лента действий (Бэкенд стиль) */
 .action-item {
     display: flex;
     gap: 12px;
@@ -54,7 +50,7 @@
 .action-info { flex: 1; font-size: 13px; }
 .action-time { font-size: 11px; color: #94a3b8; }
 
-/* Прогресс-бар для столовой */
 .db-progress-bg { background: rgba(0,0,0,0.1); height: 6px; border-radius: 10px; margin-top: 10px; width: 100px; }
 .db-progress-fill { background: #26a69a; height: 100%; border-radius: 10px; transition: 1s ease-in-out; }
 .stat-card:hover .db-progress-fill { background: white; }
+

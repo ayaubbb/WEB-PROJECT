@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let pageInterval;
     const username = localStorage.getItem('username') || 'Guest';
 
-    //let selectedTableId = null;
 
     const sidebarName = document.getElementById('username-display');
     const headerName = document.getElementById('header-username-display');
@@ -19,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const contentArea = document.getElementById('page-content');
         if (pageInterval) {
             clearInterval(pageInterval);
-            //pageInterval = null;
         }
 
         try {
@@ -27,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error('not found');
             
             contentArea.innerHTML = await res.text();
-
+            
             if (pageName === 'rooms') {
                 const { initRoomsPage } = await import('./pages/rooms/rooms.js');
                 await initRoomsPage();
@@ -38,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (document.getElementById('equipment-list')) renderEquipment();
                 }, 5000);
             } else if (pageName === 'canteen') {
-                // Импортируем функцию из нового файла canteen.js
                 const { renderTables } = await import('./pages/canteen/canteen.js');
                 renderTables();
                 pageInterval = setInterval(() => {
@@ -47,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (pageName === 'dashboard') {
                 const { initDashboardPage } = await import('./pages/dashboard/dashboard.js');
                 await initDashboardPage();
+            } else if (pageName === 'my_reports') { 
+                const { initMyReportsPage } = await import('./pages/my_reports/my_reports.js');
+                await initMyReportsPage();
             }
         } catch (err) {
             contentArea.innerHTML = '<h2>Page not found</h2>';
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const page = item.getAttribute('data-page');
             
-            if (['support', 'rooms', 'dashboard', 'canteen', 'equipment'].includes(page)) {
+            if (['support', 'rooms', 'dashboard', 'canteen', 'equipment', 'my_reports'].includes(page)) {
                 loadPage(page);
             }
             
