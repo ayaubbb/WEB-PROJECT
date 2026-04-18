@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background-color: var(--light-bg);
+    font-size: 14px !important;
 }
 
 .main-container {

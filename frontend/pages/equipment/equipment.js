@@ -1,17 +1,17 @@
 export async function renderEquipment() {
-  const list = document.getElementById('equipment-list');
+  const list = document.getElementById('eq-list-body');
   if (!list) return;
 
   await loadEquipment(list);
-  await loadRooms();  // ← добавь это
+  await loadRooms();
 
-  const submitBtn = document.getElementById('eq-submit');
+  const submitBtn = document.getElementById('eq-submit-btn');
   if (submitBtn) {
     submitBtn.onclick = async () => {
-      const name = document.getElementById('eq-name').value.trim();
-      const room = document.getElementById('eq-room').value;
-      const isWorking = document.getElementById('eq-status').value === 'true';
-      const msg = document.getElementById('eq-message');
+      const name = document.getElementById('eq-name-input').value.trim();
+      const room = document.getElementById('eq-room-select').value;
+      const isWorking = document.getElementById('eq-status-select').value === 'true';
+      const msg = document.getElementById('eq-feedback-message');
 
       if (!name || !room) {
         msg.style.color = '#e53935';
@@ -29,8 +29,8 @@ export async function renderEquipment() {
         if (res.ok) {
           msg.style.color = '#26a69a';
           msg.textContent = 'Equipment added successfully!';
-          document.getElementById('eq-name').value = '';
-          document.getElementById('eq-room').value = '';
+          document.getElementById('eq-name-input').value = '';
+          document.getElementById('eq-room-select').value = '';
           await loadEquipment(list);
         } else {
           const err = await res.json();
@@ -45,7 +45,7 @@ export async function renderEquipment() {
 }
 
 async function loadRooms() {
-  const select = document.getElementById('eq-room');
+  const select = document.getElementById('eq-room-select');
   if (!select) return;
 
   try {
@@ -77,7 +77,7 @@ async function loadEquipment(list) {
           <td>${item.name}</td>
           <td>Room ${item.room_number}</td>
           <td>
-            <span class="status-dot" style="background:${statusColor};"></span>
+            <span class="eq-status-dot" style="background:${statusColor};"></span>
             ${statusText}
           </td>
         </tr>

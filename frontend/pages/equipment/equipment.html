@@ -1,43 +1,46 @@
-<div class="page-container">
-    <div class="header-row">
+<div class="eq-page-container">
+    <div class="eq-header-row">
         <h2>Dorm Equipment Status</h2>
     </div>
 
-    <div class="card table-card">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Equipment Name</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="equipment-list">
+    <div class="eq-card-wrapper eq-table-card">
+        <div class="eq-table-container">
+            <table class="eq-data-table">
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="eq-list-body">
                 </tbody>
-        </table>
+            </table>
+        </div>
     </div>
-    <div class="card" style="margin-top: 20px; ">
-    <h3 style="margin-bottom: 16px;">Add Equipment</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="eq-name" class="custom-input" placeholder="e.g. Washing Machine">
+
+    <div class="eq-card-wrapper" style="margin-top: 20px;">
+        <h3 style="margin-bottom: 16px;">Add Equipment</h3>
+        <div class="eq-form-row">
+            <div class="eq-form-group">
+                <label>Name</label>
+                <input type="text" id="eq-name-input" class="eq-custom-input" placeholder="e.g. Washing Machine">
+            </div>
+            <div class="eq-form-group">
+                <label>Room</label>
+                <select id="eq-room-select" class="eq-custom-select">
+                    <option value="">— select room —</option>
+                </select>
+            </div>
+            <div class="eq-form-group">
+                <label>Status</label>
+                <select id="eq-status-select" class="eq-custom-select">
+                    <option value="true">Functional</option>
+                    <option value="false">Faulty</option>
+                </select>
+            </div>
+        </div>
+        <button id="eq-submit-btn" class="eq-btn-submit" style="margin-top: 10px;">Add Equipment</button>
+        <p id="eq-feedback-message" style="margin-top: 10px; color: #26a69a;"></p>
     </div>
-    <div class="form-group">
-        <label>Room</label>
-        <select id="eq-room" class="custom-select">
-            <option value="">— select room —</option>
-        </select>
-    </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="eq-status" class="custom-select">
-          <option value="true">Functional</option>
-          <option value="false">Faulty</option>
-        </select>
-      </div>
-    </div>
-    <button id="eq-submit" class="btn-confirm" style="margin-top: 10px;">Add Equipment</button>
-    <p id="eq-message" style="margin-top: 10px; color: #26a69a;"></p>
-  </div>
 </div>
