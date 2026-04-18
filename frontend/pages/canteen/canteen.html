@@ -1,39 +1,55 @@
-<div class="page-container">
-    <div class="card map-card">
-        <div class="tables-layout">
-            <div class="table-item available">Available</div>
-            <div class="table-item available">Available</div>
-            <div class="table-item available">Available</div>
-            <div class="table-item occupied">Occupied</div>
-            <div class="table-item available">Available</div>
-            <div class="table-item occupied">Occupied</div>
-            <div class="table-item available">Available</div>
-            <div class="table-item available">Available</div>
-        </div>
+<div class="canteen-container">
+    <div class="canteen-header">
+        <h2 class="canteen-title">Canteen Table Booking</h2>
     </div>
 
-    <div class="card booking-form-card">
-    <h3>Canteen Table Booking</h3>
-    <div class="form-row">
-        <div class="form-group">
-            <label>Meal Time</label>
-            <select class="custom-select">
-                <option value="Breakfast">Breakfast</option>
-                <option value="Lunch" selected>Lunch</option>
-                <option value="Dinner">Dinner</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Date</label>
-            <input type="date" class="custom-input" id="canteen-date" value="2026-04-15">
-        </div>
-        <div class="form-group">
-    <label>Selected Table</label>
-    <select id="table-select" class="custom-select">
-        <option value="">— select a table —</option>
-    </select>
-</div>
+    <div class="canteen-map-card">
+        <div id="table-map-grid" class="canteen-grid">
+            </div>
     </div>
-    <button class="btn-primary full-width">Confirm Booking</button>
-</div>
+
+    <div class="canteen-management">
+        <div class="canteen-view-card">
+            <h3>My Table Bookings</h3>
+            <div class="canteen-table-container">
+                <table class="canteen-table">
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Date</th>
+                            <th>Meal Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-bookings-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="canteen-form-card">
+            <h3>Book a Table</h3>
+            <form id="canteen-booking-form">
+                <div class="canteen-form-row">
+                    <div class="canteen-form-group">
+                        <label>Meal Time</label>
+                        <select id="meal-time-select" class="canteen-input">
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch" selected>Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                        </select>
+                    </div>
+                    <div class="canteen-form-group">
+                        <label>Select Table</label>
+                        <select id="table-select" class="canteen-input">
+                        <option value="">— select a table —</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="canteen-form-group">
+                    <label>Date</label>
+                    <input type="date" id="booking-date" class="canteen-input">
+                </div>
+                <button type="submit" class="canteen-btn-confirm">Confirm Table Booking</button>
+            </form>
+        </div>
+    </div>
 </div>

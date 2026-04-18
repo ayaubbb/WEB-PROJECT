@@ -68,10 +68,28 @@ class BookingCreateSerializer(serializers.Serializer):
         return data
     
 class CanteenTableSerializer(serializers.ModelSerializer):
+    current_occupancy = serializers.SerializerMethodField()
+    is_full = serializers.SerializerMethodField()
+    
     class Meta:
         model = CanteenTable
         fields = '__all__'
         
+    def get_current_occupancy(self, obj):
+        date = self.context.get('request').query_params.get('date', timezone.now().date())
+        meal_time = self.context.get('request').query_params.get('meal_time', 'Lunch')
+        
+        return TableBooking.objects.filter(
+            table=obj, 
+            booking_date=date, 
+            meal_time=meal_time
+        ).count()
+
+    def get_is_full(self, obj):
+        occ = self.get_current_occupancy(obj)
+        return occ >= obj.seats
+    
+    
 class TableBookingCreateSerializer(serializers.Serializer):
     table_id = serializers.IntegerField()
     booking_date = serializers.DateField()

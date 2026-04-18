@@ -123,18 +123,49 @@ class LogoutView(APIView):
 class CanteenTableListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        return Response(CanteenTableSerializer(CanteenTable.objects.all(), many=True).data)
+        date = request.query_params.get('date', timezone.now().date())
+        meal_time = request.query_params.get('meal_time', 'Lunch')
+        
+        tables = CanteenTable.objects.all()
+        serializer = CanteenTableSerializer(tables, many=True, context={'request': request})
+        return Response(serializer.data)
  
  
 class TableBookingCreateView(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request):
+        bookings = TableBooking.objects.filter(user=request.user).select_related('table')
+        data = []
+        for b in bookings:
+            data.append({
+                "id": b.id,
+                "table_number": b.table.table_number,
+                "booking_date": b.booking_date,
+                "meal_time": b.meal_time
+            })
+        return Response(data)
+
     def post(self, request):
         serializer = TableBookingCreateSerializer(data=request.data)
         if serializer.is_valid():
             table = get_object_or_404(CanteenTable, id=serializer.validated_data['table_id'])
-            TableBooking.objects.create(user=request.user, table=table,
-                booking_date=serializer.validated_data['booking_date'],
-                meal_time=serializer.validated_data['meal_time'])
+            date = serializer.validated_data['booking_date']
+            meal = serializer.validated_data['meal_time']
+
+            current_count = TableBooking.objects.filter(
+                table=table, booking_date=date, meal_time=meal
+            ).count()
+
+            if current_count >= table.seats:
+                return Response({"error": "No more seats available at this table for this time."}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            TableBooking.objects.create(
+                user=request.user, 
+                table=table,
+                booking_date=date,
+                meal_time=meal
+            )
             return Response({"message": "The table is reserved!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  

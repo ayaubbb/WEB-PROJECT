@@ -37,10 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (document.getElementById('equipment-list')) renderEquipment();
                 }, 5000);
             } else if (pageName === 'canteen') {
-                const { renderTables } = await import('./pages/canteen/canteen.js');
-                renderTables();
+                const { initCanteenPage } = await import('./pages/canteen/canteen.js');
+                await initCanteenPage();
                 pageInterval = setInterval(() => {
-                    if (document.querySelector('.tables-layout')) renderTables();
+                    const grid = document.getElementById('table-map-grid');
+                    if (grid) {
+                        import('./pages/canteen/canteen.js').then(m => m.renderTableMap());
+                    }
                 }, 5000);
             } else if (pageName === 'dashboard') {
                 const { initDashboardPage } = await import('./pages/dashboard/dashboard.js');

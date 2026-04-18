@@ -29,3 +29,7 @@
     color: white !important;
     border-color: #1d8a80 !important;
 }
+
+.card, .form-group, .btn-confirm, .custom-select {
+    font-size: 14px !important;
+}

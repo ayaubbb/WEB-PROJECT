@@ -54,7 +54,7 @@ async function renderRoomsMap() {
 
                 const opt = document.createElement('option');
                 opt.value = room.id;
-                opt.textContent = `${room.name} (${total - occupied} seats left)`;
+                opt.textContent = `${room.name} (${total - occupied} spots left)`;
                 if (isFull) opt.disabled = true; 
                 roomSelect.appendChild(opt);
 
