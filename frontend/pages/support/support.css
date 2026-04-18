@@ -48,14 +48,3 @@
     font-size: 13px;
     color: #475569;
 }
-
-.btn-primary {
-    background: #26a69a;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 400;
-}

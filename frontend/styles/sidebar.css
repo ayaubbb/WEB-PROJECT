@@ -16,7 +16,7 @@ body {
     color: var(--white);
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100vh !important;
     padding: 40px 0;
     flex-shrink: 0;
 }

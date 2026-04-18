@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let pageInterval;
     const username = localStorage.getItem('username') || 'Guest';
     
+
+
     const sidebarName = document.getElementById('username-display');
     const headerName = document.getElementById('header-username-display');
     const userAvatar = document.getElementById('user-avatar');
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error('not found');
             
             contentArea.innerHTML = await res.text();
-
+            
             if (pageName === 'rooms') {
                 const { initRoomsPage } = await import('./pages/rooms/rooms.js');
                 await initRoomsPage();
@@ -43,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (pageName === 'dashboard') {
                 const { initDashboardPage } = await import('./pages/dashboard/dashboard.js');
                 await initDashboardPage();
+            } else if (pageName === 'my_reports') { 
+                const { initMyReportsPage } = await import('./pages/my_reports/my_reports.js');
+                await initMyReportsPage();
             }
         } catch (err) {
             contentArea.innerHTML = '<h2>Page not found</h2>';
@@ -60,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const page = item.getAttribute('data-page');
             
-            if (['support', 'rooms', 'dashboard', 'canteen', 'equipment'].includes(page)) {
+            if (['support', 'rooms', 'dashboard', 'canteen', 'equipment', 'my_reports'].includes(page)) {
                 loadPage(page);
             }
             
