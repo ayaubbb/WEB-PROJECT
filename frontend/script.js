@@ -87,7 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     
-loadPage('dashboard');
+const token = localStorage.getItem('access_token');
+const isGuest = localStorage.getItem('is_guest') === 'true';
+
+if (token || isGuest) {
+    loadPage('dashboard');
+} else {
+    window.location.replace('pages/login/login.html');
+}
 
 
 function showDbDetails(type) {
