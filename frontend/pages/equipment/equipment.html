@@ -1,33 +1,43 @@
 <div class="page-container">
     <div class="header-row">
         <h2>Dorm Equipment Status</h2>
-        <button class="btn-secondary"><i class="fa-solid fa-file-signature"></i> Report Fault</button>
     </div>
 
     <div class="card table-card">
-        <div class="table-filters">
-            <div class="filter-group">
-                <label>Filter</label>
-                <select><option>All owners</option></select>
-            </div>
-            <div class="search-group">
-                <input type="text" placeholder="Search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-        </div>
-
         <table class="data-table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></th>
                     <th>Equipment Name</th>
                     <th>Location</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="equipment-list">
                 </tbody>
         </table>
     </div>
+    <div class="card" style="margin-top: 20px;">
+    <h3 style="margin-bottom: 16px;">Add Equipment</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="eq-name" class="custom-input" placeholder="e.g. Washing Machine">
+    </div>
+    <div class="form-group">
+        <label>Room</label>
+        <select id="eq-room" class="custom-select">
+            <option value="">— select room —</option>
+        </select>
+    </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="eq-status" class="custom-select">
+          <option value="true">Functional</option>
+          <option value="false">Faulty</option>
+        </select>
+      </div>
+    </div>
+    <button id="eq-submit" class="btn-confirm" style="margin-top: 10px;">Add Equipment</button>
+    <p id="eq-message" style="margin-top: 10px; color: #26a69a;"></p>
+  </div>
 </div>

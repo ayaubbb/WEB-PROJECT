@@ -143,9 +143,19 @@ def get_table_status(request, table_id):
     return Response({"table_number": table.table_number, "available": table.is_available})
  
  
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def get_equipment(request):
-    return Response(EquipmentSerializer(Equipment.objects.all(), many=True).data)
+    if request.method == 'GET':
+        return Response(EquipmentSerializer(Equipment.objects.all(), many=True).data)
+    
+    if request.method == 'POST':
+        serializer = EquipmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def dashboard_stats(request):

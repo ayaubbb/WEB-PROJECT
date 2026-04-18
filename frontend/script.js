@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let pageInterval;
     const username = localStorage.getItem('username') || 'Guest';
-
-    //let selectedTableId = null;
-
+    
     const sidebarName = document.getElementById('username-display');
     const headerName = document.getElementById('header-username-display');
     const userAvatar = document.getElementById('user-avatar');
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const contentArea = document.getElementById('page-content');
         if (pageInterval) {
             clearInterval(pageInterval);
-            //pageInterval = null;
         }
 
         try {
@@ -38,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (document.getElementById('equipment-list')) renderEquipment();
                 }, 5000);
             } else if (pageName === 'canteen') {
-                // Импортируем функцию из нового файла canteen.js
                 const { renderTables } = await import('./pages/canteen/canteen.js');
                 renderTables();
                 pageInterval = setInterval(() => {
