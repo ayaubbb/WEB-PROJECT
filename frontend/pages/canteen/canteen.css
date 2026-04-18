@@ -45,7 +45,7 @@
     flex-direction: column; 
     align-items: center; 
     justify-content: center;
-    font-size: 13px; 
+    font-size: 14px; 
     font-weight: 600; 
     transition: all 0.2s ease; 
     border-radius: 6px;
@@ -57,8 +57,8 @@
 .canteen-box.available.selected { background: #0f766e; outline: 3px solid #134e4a; }
 .canteen-box.busy { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
 
-.canteen-box span { font-size: 14px; margin-bottom: 2px; } 
-.canteen-box small { font-size: 10px; font-weight: 400; opacity: 0.9; }
+.canteen-box span { font-size: 14px; margin-bottom: 2px; font-weight: 600; } 
+.canteen-box small { font-size: 12px; font-weight: 400; opacity: 0.9; font-weight: 600; }
 
 .canteen-management { 
     display: grid; 

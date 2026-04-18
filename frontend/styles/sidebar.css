@@ -16,9 +16,12 @@ body {
     color: var(--white);
     display: flex;
     flex-direction: column;
-    height: 100vh !important;
+    min-height: 100vh; 
+    height: auto;      
     padding: 40px 0;
     flex-shrink: 0;
+    position: sticky;  
+    top: 0;
 }
 
 .logo-wrapper {
