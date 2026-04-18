@@ -51,21 +51,18 @@ class BookingCreateView(APIView):
             end     = serializer.validated_data['end_time']
             room    = get_object_or_404(Room, id=room_id)
  
-            # 1. Считаем, сколько человек УЖЕ забронировали эту комнату на это время
             current_bookings_count = Booking.objects.filter(
                 room=room, 
                 start_time__lt=end, 
                 end_time__gt=start
             ).count()
 
-            # 2. Проверяем, есть ли еще свободные места
             if current_bookings_count >= room.capacity:
                 return Response(
-                    {"error": f"В комнате {room.number} больше нет свободных мест (максимум: {room.capacity})."},
+                    {"error": f"In room {room.number} no more available spots (maximum: {room.capacity})."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
  
-            # 3. Если места есть, создаем бронь
             booking = Booking.objects.create(
                 user=request.user,
                 room=room,

@@ -45,7 +45,6 @@ async function renderRoomsMap() {
                 const isFull = occupied >= total;
 
                 const box = document.createElement('div');
-                // Оставляем логику: если мест нет — busy (серый), если есть — available (зеленый)
                 box.className = `room-box ${isFull ? 'busy' : 'available'}`;
                 
                 box.innerHTML = `
@@ -53,15 +52,12 @@ async function renderRoomsMap() {
                     <small>${isFull ? 'Occupied' : 'Available: ' + occupied + ' / ' + total}</small>
                 `;
 
-                // Добавляем комнату в выпадающий список В ЛЮБОМ СЛУЧАЕ, 
-                // чтобы форма не ломалась, но помечаем если она полная
                 const opt = document.createElement('option');
                 opt.value = room.id;
                 opt.textContent = `${room.name} (${total - occupied} seats left)`;
-                if (isFull) opt.disabled = true; // Просто нельзя выбрать полную
+                if (isFull) opt.disabled = true; 
                 roomSelect.appendChild(opt);
 
-                // Клик по плитке
                 if (!isFull) {
                     box.title = 'Click to select this room';
                     box.addEventListener('click', () => {
