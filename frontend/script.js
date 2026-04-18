@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const page = item.getAttribute('data-page');
             
             if (['support', 'rooms', 'dashboard', 'canteen', 'equipment', 'my_reports'].includes(page)) {
+                localStorage.setItem('currentPage', page);
                 loadPage(page);
             }
             
@@ -89,9 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
 const token = localStorage.getItem('access_token');
 const isGuest = localStorage.getItem('is_guest') === 'true';
+const lastPage = localStorage.getItem('currentPage') || 'dashboard';
 
 if (token || isGuest) {
-    loadPage('dashboard');
+    loadPage(lastPage);
+    const activeItem = document.querySelector(`.menu-item[data-page="${lastPage}"]`);
+    if (activeItem) {
+        menuItems.forEach(i => i.classList.remove('active'));
+        activeItem.classList.add('active');
+        pageTitle.textContent = activeItem.textContent.trim();
+    }
 } else {
     window.location.replace('pages/login/login.html');
 }

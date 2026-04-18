@@ -47,14 +47,14 @@ async function renderRoomsMap() {
                 const box = document.createElement('div');
                 box.className = `room-box ${isFull ? 'busy' : 'available'}`;
                 
+                const availableSpots = total - occupied;
                 box.innerHTML = `
                     <span>${room.name}</span>
-                    <small>${isFull ? 'Occupied' : 'Available: ' + occupied + ' / ' + total}</small>
+                    <small>${isFull ? 'Occupied' : 'Available: ' + availableSpots + ' / ' + total}</small>
                 `;
-
                 const opt = document.createElement('option');
                 opt.value = room.id;
-                opt.textContent = `${room.name} (${total - occupied} spots left)`;
+                opt.textContent = `${room.name} (${availableSpots} free of ${total})`;
                 if (isFull) opt.disabled = true; 
                 roomSelect.appendChild(opt);
 
