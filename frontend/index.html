@@ -50,7 +50,7 @@
                 </a>
             </nav>
             <div class="user-bottom">
-                <img src="https://ui-avatars.com/api/?name=User&background=00C9B1&color=fff&rounded=true" alt="avatar" class="avatar" id="user-avatar">
+                <div id="user-avatar" class="avatar" style="background:#26a69a;color:white;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;border-radius:50%;width:36px;height:36px;flex-shrink:0;">AD</div>
                 <span id="username-display">Loading...</span>
                 <i class="fa-solid fa-arrow-right-from-bracket logout-icon" id="logout-btn" style="cursor: pointer; margin-left: auto;"></i>
             </div>
@@ -65,8 +65,7 @@
                         <span class="user-name-text" id="header-username-display">Loading...</span>
                         <span class="user-status-text">Student</span>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=User&background=00C9B1&color=fff&rounded=true" 
-                        alt="avatar" class="header-avatar" id="header-user-avatar">
+                    <div id="header-user-avatar" class="header-avatar" style="background:#26a69a;color:white;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;border-radius:50%;width:36px;height:36px;flex-shrink:0;">AD</div>
                 </div>
             </header>
             
@@ -74,7 +73,23 @@
             </section>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = localStorage.getItem('username') || 'Guest';
+            let initials;
+            if (username.includes(' ')) {
+                initials = username.split(' ')
+                    .map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            } else {
+                initials = username.slice(0, 2).toUpperCase();
+            }
+            const sidebarAv = document.getElementById('user-avatar');
+            const headerAv = document.getElementById('header-user-avatar');
+            if (sidebarAv) sidebarAv.textContent = initials;
+            if (headerAv) headerAv.textContent = initials;
+        });
+    </script>
     <script type="module" src="script.js"></script>
-    
 </body>
 </html>
