@@ -34,7 +34,7 @@
 .stat-card:hover .card-icon, .stat-card.active .card-icon { opacity: 1; }
 
 .dashboard-details { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
-.details-view { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
+.details-view { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-y: auto;  height: 500px; }
 .view-header { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; background: #f8fafc; }
 .view-header h3 { font-size: 16px; color: #1e293b; }
 .view-content { padding: 20px; min-height: 250px; }
@@ -44,6 +44,7 @@
     gap: 12px;
     padding: 12px 0;
     border-bottom: 1px solid #f1f5f9;
+    overflow-y: auto; 
 }
 .action-item:last-child { border: none; }
 .action-avatar { width: 35px; height: 35px; background: #26a69a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
