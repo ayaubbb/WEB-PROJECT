@@ -23,6 +23,7 @@ async function renderRoomsMap() {
     const roomSelect = document.getElementById('room-select');
     if (!mapGrid) return;
 
+    const currentSelectedId = roomSelect.value;
     mapGrid.innerHTML = '<div class="map-loading">Loading rooms...</div>';
 
     try {
@@ -39,27 +40,35 @@ async function renderRoomsMap() {
             row.className = 'map-row';
 
             rooms.slice(i, i + COLS).forEach(room => {
-                const isBusy = room.is_busy;
+                const occupied = room.current_occupancy || 0;
+                const total = room.capacity || 1;
+                const isFull = occupied >= total;
 
                 const box = document.createElement('div');
-                box.className = `room-box ${isBusy ? 'busy' : 'available'}`;
+                // Оставляем логику: если мест нет — busy (серый), если есть — available (зеленый)
+                box.className = `room-box ${isFull ? 'busy' : 'available'}`;
+                
                 box.innerHTML = `
                     <span>${room.name}</span>
-                    <small>${isBusy ? 'Occupied' : room.capacity + ' seats'}</small>
+                    <small>${isFull ? 'Occupied' : 'Available: ' + occupied + ' / ' + total}</small>
                 `;
 
-                if (!isBusy) {
+                // Добавляем комнату в выпадающий список В ЛЮБОМ СЛУЧАЕ, 
+                // чтобы форма не ломалась, но помечаем если она полная
+                const opt = document.createElement('option');
+                opt.value = room.id;
+                opt.textContent = `${room.name} (${total - occupied} seats left)`;
+                if (isFull) opt.disabled = true; // Просто нельзя выбрать полную
+                roomSelect.appendChild(opt);
+
+                // Клик по плитке
+                if (!isFull) {
                     box.title = 'Click to select this room';
                     box.addEventListener('click', () => {
                         roomSelect.value = room.id;
-                        document.querySelectorAll('.room-box.available').forEach(b => b.classList.remove('selected'));
+                        document.querySelectorAll('.room-box').forEach(b => b.classList.remove('selected'));
                         box.classList.add('selected');
                     });
-
-                    const opt = document.createElement('option');
-                    opt.value       = room.id;
-                    opt.textContent = `${room.name} (${room.capacity} seats)`;
-                    roomSelect.appendChild(opt);
                 }
 
                 row.appendChild(box);
@@ -138,8 +147,13 @@ function initBookingForm(username) {
             });
 
             if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.error || err.detail || `HTTP ${res.status}`);
+                const errData = await res.json().catch(() => ({}));
+                let errorMessage = errData.error || errData.detail || "Server error";
+                if (typeof errData === 'object' && !errData.error && !errData.detail) {
+                    errorMessage = Object.values(errData).flat().join(' | ');
+                }
+
+                throw new Error(errorMessage);
             }
 
             showNotification('Booking confirmed!', 'success');
