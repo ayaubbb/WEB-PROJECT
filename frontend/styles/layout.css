@@ -24,3 +24,30 @@ body {
     padding: 30px;
     overflow-y: auto; 
 }
+
+::-webkit-scrollbar {
+    width: 6px;  
+    height: 6px; 
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #26a69a; 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1d8a80;
+}
+
+.eq-table-container, 
+.view-content, 
+.canteen-table-container, 
+.reports-grid {
+    scrollbar-width: thin; 
+    scrollbar-color: #26a69a #f1f5f9;
+}
