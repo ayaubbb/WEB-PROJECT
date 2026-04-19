@@ -5,11 +5,11 @@
     margin-bottom: 24px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     border: 1px solid #edf2f7;
-    overflow: hidden;
+    overflow: hidden; 
 }
 
 .reports-grid {
-    display: flex;     
+    display: flex;       
     flex-wrap: nowrap; 
     gap: 16px;
     overflow-x: auto;     
@@ -21,7 +21,7 @@
 .report-card {
     flex: 0 0 350px;     
     background: #fff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #26a69a;
     border-radius: 10px;
     padding: 15px;
     display: flex;
@@ -67,6 +67,18 @@
     object-fit: cover;
 }
 
+.user-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    background-color: #e0f2f1; 
+    color: #26a69a;
+    border-radius: 8px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
 .username {
     font-weight: 700;
     font-size: 13px;
@@ -76,7 +88,7 @@
 .complaint-tag {
     font-size: 12px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #26a69a;
     display: flex;
     align-items: center;
     gap: 5px;

@@ -3,6 +3,7 @@ export const initDashboardPage = async () => {
         const res = await fetch('http://127.0.0.1:8000/dashboard-stats/');
         const data = await res.json();
         
+        // Обновление статистики
         const roomsVal = document.getElementById('stat-rooms');
         if (roomsVal) roomsVal.textContent = data.active_bookings;
         
@@ -16,6 +17,7 @@ export const initDashboardPage = async () => {
         const reportsVal = document.getElementById('stat-reports');
         if (reportsVal) reportsVal.textContent = data.open_reports;
 
+        // Обновление лога действий
         const actionsContainer = document.getElementById('actions-log'); 
         if (actionsContainer && data.latest_actions) {
             actionsContainer.innerHTML = data.latest_actions.map(act => `
@@ -33,9 +35,84 @@ export const initDashboardPage = async () => {
             `).join('');
         }
 
+        const infoData = {
+            rooms: `
+                <div class="info-wrapper">
+                    <div class="info-card highlight-teal">
+                        <div class="card-header-inner">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Available Hours</span>
+                        </div>
+                        <p class="hero-text">08:00 — 23:00</p>
+                        <div class="status-badge">Daily Access</div>
+                    </div>
+                    <div class="info-card highlight-red">
+                        <div class="card-header-inner">
+                            <i class="fa-solid fa-headset"></i>
+                            <span>Support Only</span>
+                        </div>
+                        <p class="card-desc">Self-cancellation is <strong>disabled</strong> to prevent booking abuse. Please contact the administrator.</p>
+                    </div>
+                    <div class="info-card full-width info-banner">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span><strong>Advanced Booking Required:</strong> Please ensure all reservations are made <strong>prior</strong> to your intended start time to guarantee system confirmation.</span>
+                    </div>
+                </div>`,
+            canteen: `
+                <div class="info-wrapper">
+                    <div class="schedule-container">
+                        <div class="schedule-card">
+                            <div class="meal-icon">🍳</div>
+                            <div class="meal-info">
+                                <span class="meal-name">Breakfast</span>
+                                <span class="meal-time">06:30 – 09:00</span>
+                            </div>
+                        </div>
+                        <div class="schedule-card">
+                            <div class="meal-icon">🍱</div>
+                            <div class="meal-info">
+                                <span class="meal-name">Lunch</span>
+                                <span class="meal-time">11:00 – 13:00</span>
+                            </div>
+                        </div>
+                        <div class="schedule-card">
+                            <div class="meal-icon">🍕</div>
+                            <div class="meal-info">
+                                <span class="meal-name">Dinner</span>
+                                <span class="meal-time">17:00 – 19:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
+            reports: `
+                <div class="info-wrapper">
+                    <div class="report-steps-v2">
+                        <div class="step-v2">
+                            <div class="step-icon-v2"><i class="fa-solid fa-pen-to-square"></i></div>
+                            <div class="step-text-v2">
+                                <strong>Simple Reporting</strong>
+                                <span>Just tell us what’s broken (e.g. "Microwave") and describe the issue.</span>
+                            </div>
+                        </div>
+                        <div class="step-v2 urgent-v2">
+                            <div class="step-icon-v2"><i class="fa-solid fa-bolt-lightning"></i></div>
+                            <div class="step-text-v2">
+                                <strong>Safety First</strong>
+                                <span>For leaks or electrical issues, contact Security or Staff immediately.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-card full-width feedback-banner">
+                        <div class="feedback-content">
+                            <i class="fa-solid fa-comment-dots"></i>
+                            <span><strong>We value your feedback!</strong> Tell us how we can make the dorm better.</span>
+                        </div>
+                    </div>
+                </div>`
+        };
         const cards = document.querySelectorAll('.stat-card');
         const detailTitle = document.getElementById('details-title');
-        const chartContainer = document.getElementById('dynamic-chart');
+        const infoContentArea = document.getElementById('info-content-area');
 
         cards.forEach(card => {
             card.addEventListener('click', () => {
@@ -43,9 +120,13 @@ export const initDashboardPage = async () => {
                 card.classList.add('active');
 
                 const type = card.getAttribute('data-type');
-                
                 const label = card.querySelector('.card-label').textContent;
+                
                 if (detailTitle) detailTitle.textContent = label;
+                
+                if (infoContentArea && infoData[type]) {
+                    infoContentArea.innerHTML = infoData[type];
+                }
             });
         });
 
@@ -58,45 +139,3 @@ export const initDashboardPage = async () => {
     }
 };
 
-function renderSimpleChart(container, heights) {
-    if (!container) return;
-    container.innerHTML = ''; 
-
-    if (!heights || heights.length === 0) {
-        container.innerHTML = '<div class="chart-empty-msg">No data available</div>';
-        return;
-    }
-
-    const realMax = Math.max(...heights);
-    const maxValForScale = realMax < 10 ? 10 : realMax;
-
-    container.innerHTML = heights.map(h => {
-        const barHeight = (h / maxValForScale) * 100;
-        return `
-            <div class="bar-group" style="
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: flex-end;
-                gap: 8px; 
-                height: 100%;
-                flex: 1;
-            ">
-                <span style="font-size: 12px; color: #94a3b8; font-weight: bold;">${h}</span>
-                <div style="
-                    height: ${barHeight}%; 
-                    width: 45px; 
-                    background: linear-gradient(180deg, #26a69a 0%, #80cbc4 100%); 
-                    border-radius: 6px 6px 0 0;
-                    transition: all 0.5s ease;
-                "></div>
-            </div>
-        `;
-    }).join('');
-
-    container.style.display = 'flex';
-    container.style.alignItems = 'flex-end'; 
-    container.style.justifyContent = 'space-around';
-    container.style.height = '200px'; 
-    container.style.padding = '20px 10px 10px 10px';
-}

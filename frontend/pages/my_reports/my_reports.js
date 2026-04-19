@@ -68,7 +68,7 @@ export const initMyReportsPage = async () => {
                                     ${act.user[0].toUpperCase()}
                                 </div>
                                 <div class="user-text">
-                                    <span class="username">${act.user} — Room 101</span>
+                                    <span class="username">${act.user}</span>
                                 </div>
                             </div>
                             <div class="complaint-tag">
