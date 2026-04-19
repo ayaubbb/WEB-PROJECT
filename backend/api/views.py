@@ -1,4 +1,6 @@
-from rest_framework.views import APIView
+import json
+
+from rest_framework.views import APIView, csrf_exempt
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
@@ -11,7 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Booking, CanteenTable, IssueReport, TableBooking
 from .models import TableBooking
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -203,12 +205,12 @@ def dashboard_stats(request):
     from datetime import date 
 
     active_bookings = Booking.objects.count()
-    total_tables = CanteenTable.objects.count()
-  
-    occupied_today = TableBooking.objects.filter(booking_date=date.today()).count()
-    if total_tables > 0:
-        available_count = total_tables - occupied_today
-        canteen_percent = int((available_count / total_tables) * 100)
+    total_seats = CanteenTable.objects.aggregate(Sum('seats'))['seats__sum'] or 0
+    occupied_seats = TableBooking.objects.filter(booking_date=date.today()).count()
+
+    if total_seats > 0:
+        available_seats = total_seats - occupied_seats
+        canteen_percent = int((available_seats / total_seats) * 100)
     else:
         canteen_percent = 0
         
@@ -268,7 +270,36 @@ def dashboard_stats(request):
         "latest_actions": actions
     })
 
+@csrf_exempt
 def issue_reports_api(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            
+            title = body.get('title')
+            description = body.get('description')
+            category = body.get('category', 'equipment')
+            eq_id = body.get('equipment_id')
+
+            from django.contrib.auth.models import User
+            mock_user = User.objects.filter(is_superuser=True).first()
+
+            equipment = None
+            if eq_id:
+                from .models import Equipment
+                equipment = Equipment.objects.filter(id=eq_id).first()
+
+            IssueReport.objects.create(
+                user=mock_user,
+                title=title,
+                description=description,
+                category=category,
+                equipment=equipment
+            )
+            return JsonResponse({"status": "success"}, status=201)
+            
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
     reports = IssueReport.objects.all().order_by('-created_at')
     
     data = []

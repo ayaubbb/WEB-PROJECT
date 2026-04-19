@@ -18,8 +18,22 @@ export const initMyReportsPage = async () => {
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="report-title" placeholder="Summary..." required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')">
+                            </div>
+                            <div class="form-group">
+                                <label>Equipment (Optional)</label>
+                                <select id="report-equipment-id">
+                                    <option value="">---------</option>
+                                    <option value="1">Washing Machine LG in 101</option>
+                                    <option value="2">Microwave Samsung in 102</option>
+                                    <option value="3">Fridge Bosh in 103</option>
+                                    <option value="4">Oven Bosh in 104</option>
+                                    </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Description</label>
-                                <textarea id="report-text" placeholder="Describe the issue..." required></textarea>
+                                <textarea id="report-text" placeholder="Describe the issue..." required oninvalid="this.setCustomValidity('Please fill out this field')" oninput="this.setCustomValidity('')"></textarea>
                             </div>
                             <button type="submit" class="submit-form-btn">Send Report</button>
                         </form>
@@ -105,13 +119,17 @@ function setupModalLogic() {
             return cookieValue;
         };
 
+        const categorySelect = document.getElementById('report-category');
+        const eqValue = document.getElementById('report-equipment-id').value;
         const formData = {
+            title: document.getElementById('report-title').value,
+            description: document.getElementById('report-text').value,
             category: document.getElementById('report-category').value,
-            text: document.getElementById('report-text').value
+            equipment_id: eqValue ? parseInt(eqValue) : null
         };
 
         try {
-            const res = await fetch('http://127.0.0.1:8000/issues/', {
+            const res = await fetch('http://127.0.0.1:8000/reports/', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -126,7 +144,7 @@ function setupModalLogic() {
                 await initMyReportsPage(); 
             } else {
                 const errorData = await res.json();
-                alert('Error: ' + (errorData.message || 'Failed to save'));
+                alert('Error: ' + JSON.stringify(errorData));
             }
         } catch (err) {
             console.error('Network error:', err);

@@ -77,10 +77,10 @@ function renderSimpleChart(container, heights) {
                 display: flex; 
                 flex-direction: column; 
                 align-items: center; 
-                justify-content: flex-end; /* Выравниваем всё по низу */
+                justify-content: flex-end;
                 gap: 8px; 
-                height: 100%; /* ТЕПЕРЬ ОБЕРТКА ЗАНИМАЕТ ВСЮ ВЫСОТУ */
-                flex: 1; /* Распределяем их равномерно */
+                height: 100%;
+                flex: 1;
             ">
                 <span style="font-size: 12px; color: #94a3b8; font-weight: bold;">${h}</span>
                 <div style="
@@ -95,7 +95,7 @@ function renderSimpleChart(container, heights) {
     }).join('');
 
     container.style.display = 'flex';
-    container.style.alignItems = 'flex-end'; // Контейнер держит всё внизу
+    container.style.alignItems = 'flex-end'; 
     container.style.justifyContent = 'space-around';
     container.style.height = '200px'; 
     container.style.padding = '20px 10px 10px 10px';
