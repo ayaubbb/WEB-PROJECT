@@ -1247,6 +1247,14 @@
               "body": "{\n    \"table_number\": 1,\n    \"available\": true\n}"
             }
           ]
+        },
+        {
+          "name": "Canteen Report",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
         }
       ]
     },
@@ -1586,6 +1594,105 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Dashboard Stats",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"table_id\": 1,\n    \"description\": \"Table is wobbly\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/dashboard-stats/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "dashboard-stats",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Dashboard Stats",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"table_id\": 1,\n    \"description\": \"Table is wobbly\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/dashboard-stats/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "dashboard-stats",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Mon, 20 Apr 2026 07:56:07 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.12.7"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "917"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"active_bookings\": 8,\n    \"canteen_percent\": 93,\n    \"open_reports\": 6,\n    \"cards\": {\n        \"rooms\": 8,\n        \"canteen\": 93,\n        \"reports\": 6\n    },\n    \"charts\": {\n        \"rooms\": [\n            1,\n            1,\n            1,\n            1,\n            2,\n            1,\n            1\n        ],\n        \"canteen\": [\n            100,\n            100,\n            100,\n            100,\n            100,\n            100,\n            100,\n            100,\n            100,\n            100\n        ],\n        \"reports\": [\n            5,\n            10,\n            2,\n            8\n        ]\n    },\n    \"latest_actions\": [\n        {\n            \"user\": \"admin\",\n            \"text\": \"booked Room Laundry\",\n            \"time\": \"00:29\",\n            \"category\": \"rooms\"\n        },\n        {\n            \"user\": \"ayaulym\",\n            \"text\": \"booked Room VIP room\",\n            \"time\": \"19:08\",\n            \"category\": \"rooms\"\n        },\n        {\n            \"user\": \"ayaulym\",\n            \"text\": \"booked Room 102\",\n            \"time\": \"17:05\",\n            \"category\": \"rooms\"\n        },\n        {\n            \"user\": \"admin\",\n            \"text\": \"reported: Chair was broken\",\n            \"time\": \"19:09\",\n            \"category\": \"reports\"\n        },\n        {\n            \"user\": \"admin\",\n            \"text\": \"reported: Dirty equipment\",\n            \"time\": \"15:43\",\n            \"category\": \"reports\"\n        },\n        {\n            \"user\": \"admin\",\n            \"text\": \"booked Table #5 (Lunch)\",\n            \"time\": \"Today\",\n            \"category\": \"canteen\"\n        },\n        {\n            \"user\": \"admin\",\n            \"text\": \"booked Table #1 (Breakfast)\",\n            \"time\": \"Today\",\n            \"category\": \"canteen\"\n        },\n        {\n            \"user\": \"ayaulym\",\n            \"text\": \"booked Table #2 (Breakfast)\",\n            \"time\": \"Today\",\n            \"category\": \"canteen\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
     }
   ],
   "auth": {
@@ -1593,7 +1700,7 @@
     "bearer": [
       {
         "key": "token",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc1OTI3MDQ3LCJpYXQiOjE3NzU5MjM0NDcsImp0aSI6IjExZjg5OWNkODJmMTQzMjliMTcxZDMzZWFlOTg1Y2YwIiwidXNlcl9pZCI6IjMifQ.alxYb7SHK8Jfv9fZt4y1mJZ_jQCDI_0JvNBk7adkLsM",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Njc1MzMxLCJpYXQiOjE3NzY2NzE3MzEsImp0aSI6ImVmNDQ2MzhkYmI4OTRmZjk5ZDk3MjA2NjY1MDExOGYwIiwidXNlcl9pZCI6IjMifQ.-aEayc9qSbgzqPeZXRcTpedXwzuwuI4qzBP7ekSuiqk",
         "type": "string"
       }
     ]
